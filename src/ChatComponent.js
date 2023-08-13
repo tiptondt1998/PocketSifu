@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css'; // Import your CSS file for styling
-import openai, {model, response, Completion} from 'openai';
 
-const apiKey = 'apiKey'; // Replace with your actual API key
+const apiKey = 'apikey'; // Replace with your actual API key
 const taiChiKeywords = ['tai chi', 'martial arts', 'qi gong', 'movement', 'posture', 'breathing', 'form', 'philosophy'];
 
 const hasTaiChiContent = (input) => {
@@ -13,16 +12,15 @@ const hasTaiChiContent = (input) => {
 
 const ChatComponent = () => {
   const [userInput, setUserInput] = useState('');
-  const [aiResponses, setAiResponses] = useState([]);
   const [conversationHistory, setConversationHistory] = useState([]);
 
   const generateResponseFromGPT3 = async (input) => {
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
+        'https://api.openai.com/v1/engines/davinci/completions',
         {
           prompt: input,
-          max_tokens: 50, // Adjust the number of tokens based on desired response length
+          max_tokens: 100 // Adjust the number of tokens based on desired response length 
         },
         {
           headers: {
@@ -30,7 +28,7 @@ const ChatComponent = () => {
             'Authorization': `Bearer ${apiKey}`,
           },
         }
-       );
+      );
 
       return response.data.choices[0].text;
     } catch (error) {
@@ -39,19 +37,16 @@ const ChatComponent = () => {
     }
   };
 
-// ... (previous code)
-
-const handleUserInput = async () => {
-  if (hasTaiChiContent(userInput)) {
-    const aiResponse = await generateResponseFromGPT3(userInput);
-    const newConversation = [{ user: userInput, ai: aiResponse }]; // Replace existing conversation
-    setConversationHistory(newConversation);
-  } else {
-    console.log('User input lacks sufficient Tai Chi content.');
-  }
-  setUserInput('');
-};
-
+  const handleUserInput = async () => {
+    if (hasTaiChiContent(userInput)) {
+      const aiResponse = await generateResponseFromGPT3(userInput);
+      const newConversation = [{ user: userInput, ai: aiResponse }]; // Replace existing conversation
+      setConversationHistory(newConversation);
+    } else {
+      console.log('User input lacks sufficient Tai Chi content.');
+    }
+    setUserInput('');
+  };
 
   return (
     <div>
