@@ -110,8 +110,10 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css'; // Import your CSS file for styling
+import openai, {model, response, Completion} from 'openai';
 
-const apiKey = 'YOUR_OPENAI_API_KEY'; // Replace with your actual API key
+const apiKey = 'apiKey'; // Replace with your actual API key
 const taiChiKeywords = ['tai chi', 'martial arts', 'qi gong', 'movement', 'posture', 'breathing', 'form', 'philosophy'];
 
 const hasTaiChiContent = (input) => {
@@ -127,7 +129,7 @@ const ChatComponent = () => {
   const generateResponseFromGPT3 = async (input) => {
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/engines/davinci-codex/completions',
+        'https://api.openai.com/v1/chat/completions',
         {
           prompt: input,
           max_tokens: 50, // Adjust the number of tokens based on desired response length
@@ -138,7 +140,7 @@ const ChatComponent = () => {
             'Authorization': `Bearer ${apiKey}`,
           },
         }
-      );
+       );
 
       return response.data.choices[0].text;
     } catch (error) {
@@ -147,24 +149,27 @@ const ChatComponent = () => {
     }
   };
 
-  const handleUserInput = async () => {
-    if (hasTaiChiContent(userInput)) {
-      const aiResponse = await generateResponseFromGPT3(userInput);
-      const newConversation = [...conversationHistory, { user: userInput, ai: aiResponse }];
-      setConversationHistory(newConversation);
-    } else {
-      console.log('User input lacks sufficient Tai Chi content.');
-    }
-    setUserInput('');
-  };
+// ... (previous code)
+
+const handleUserInput = async () => {
+  if (hasTaiChiContent(userInput)) {
+    const aiResponse = await generateResponseFromGPT3(userInput);
+    const newConversation = [{ user: userInput, ai: aiResponse }]; // Replace existing conversation
+    setConversationHistory(newConversation);
+  } else {
+    console.log('User input lacks sufficient Tai Chi content.');
+  }
+  setUserInput('');
+};
+
 
   return (
     <div>
-      <div>
+      <div className="conversation-container">
         {conversationHistory.map((conversation, index) => (
-          <div key={index}>
-            <div>User: {conversation.user}</div>
-            <div>AI: {conversation.ai}</div>
+          <div key={index} className="conversation">
+            <div className="user">User: {conversation.user}</div>
+            <div className="ai">AI: {conversation.ai}</div>
           </div>
         ))}
       </div>
