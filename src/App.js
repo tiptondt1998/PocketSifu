@@ -4,7 +4,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div>
+    <div className='body'>
       <h1>AI Tai Chi Trainer</h1>
       <ChatComponent />
     </div>
