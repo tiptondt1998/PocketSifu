@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './App.css'; // Import your CSS file for styling
+import './App.css';
 
-const apiKey = 'apikey'; // Replace with your actual API key
+const apiKey;
 const taiChiKeywords = ['tai chi', 'martial arts', 'qi gong', 'movement', 'posture', 'breathing', 'form', 'philosophy'];
 
 const hasTaiChiContent = (input) => {
@@ -20,7 +20,7 @@ const ChatComponent = () => {
         'https://api.openai.com/v1/engines/davinci/completions',
         {
           prompt: input,
-          max_tokens: 100 // Adjust the number of tokens based on desired response length 
+          max_tokens: 200,
         },
         {
           headers: {
@@ -40,7 +40,7 @@ const ChatComponent = () => {
   const handleUserInput = async () => {
     if (hasTaiChiContent(userInput)) {
       const aiResponse = await generateResponseFromGPT3(userInput);
-      const newConversation = [{ user: userInput, ai: aiResponse }]; // Replace existing conversation
+      const newConversation = [{ user: userInput, ai: aiResponse }];
       setConversationHistory(newConversation);
     } else {
       console.log('User input lacks sufficient Tai Chi content.');
@@ -58,14 +58,15 @@ const ChatComponent = () => {
           </div>
         ))}
       </div>
-      <div>
+      <div className="input-container">
         <input
+          className="input-field"
           type="text"
-          placeholder="Enter your message..."
+          placeholder="Enter your message. The more specific your message, the better and more relevant your response"
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
         />
-        <button onClick={handleUserInput}>Send</button>
+        <button className="send-button" onClick={handleUserInput}>Send</button>
       </div>
     </div>
   );

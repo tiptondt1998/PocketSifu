@@ -6,7 +6,7 @@ import "./App.css";
 function App() {
   return (
     <div className='body'>
-      <h1>AI Tai Chi Trainer</h1>
+      <h1>Pocket Sifu - Your Virtual Tai Chi Training Assistant</h1>
       <ChatComponent />
       <Footer />
     </div>
